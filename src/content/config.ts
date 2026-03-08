@@ -1,13 +1,13 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection, z } from "astro:content";
 
 // Accept either full URLs (https://...) OR site paths (/assets/..., /images/...)
 const link = z.string().refine(
-  (v) => /^https?:\/\//i.test(v) || v.startsWith('/'),
-  { message: 'Must be an absolute URL (https://...) or a site path (/assets/...)' }
+  (v) => /^https?:\/\//i.test(v) || v.startsWith("/"),
+  { message: "Must be an absolute URL (https://...) or a site path (/...)." }
 );
 
 const projects = defineCollection({
-  type: 'content',
+  type: "content",
   schema: z.object({
     title: z.string(),
     subtitle: z.string().optional(),
