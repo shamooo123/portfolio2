@@ -1,16 +1,17 @@
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
-import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
+  // Used for canonical URLs + social preview meta
   site: 'https://hishaamabbasi.co.uk',
+
   integrations: [
     tailwind({
-      applyBaseStyles: false
+      applyBaseStyles: false,
     }),
-    sitemap()
   ],
+
   build: {
-    format: 'directory'
-  }
+    format: 'directory',
+  },
 });
