@@ -1,0 +1,48 @@
+---
+import "../styles/global.css";
+const {
+  title = "Hishaam Ali Abbasi | Robotics Engineer & Developer",
+  description = "Portfolio of Hishaam Ali Abbasi — Robotics Engineering student focused on control, embedded systems, and hardware/software integration.",
+  canonicalPath = Astro.url.pathname,
+  image = "/images/profile.jpg",
+  noindex = false
+} = Astro.props;
+
+const canonical = new URL(canonicalPath, Astro.site).toString();
+const ogImage = new URL(image, Astro.site).toString();
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Hishaam Ali Abbasi" />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+
+    <!-- OpenGraph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Hishaam Ali Abbasi" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=Fira+Code&display=swap" rel="stylesheet" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body class="bg-slate-950 text-slate-200 selection:bg-blue-500 selection:text-white antialiased">
+    <slot />
+  </body>
+</html>

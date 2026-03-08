@@ -1,0 +1,47 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+import { getCollection } from "astro:content";
+
+const projects = (await getCollection("projects"))
+  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+---
+
+<BaseLayout
+  title="Case Studies | Hishaam Ali Abbasi"
+  description="Detailed write-ups of my robotics and engineering projects: system architecture, design decisions, and results."
+  canonicalPath="/projects/"
+>
+  <div class="fixed inset-0 z-0 pointer-events-none">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(56,189,248,0.04),transparent_55%)]"></div>
+    <div class="absolute inset-0" style="background-image: radial-gradient(rgba(148, 163, 184, 0.05) 1px, transparent 1px); background-size: 40px 40px;"></div>
+  </div>
+
+  <Nav />
+
+  <main class="relative z-10 pt-28 pb-10 px-6 max-w-6xl mx-auto">
+    <div class="mb-10">
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white">Case studies</h1>
+      <p class="mt-3 text-slate-400 max-w-2xl">
+        Deeper write-ups: what I built, why I made the decisions I did, and what I’d improve next.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {projects.map((p) => (
+        <ProjectCard
+          href={`/projects/${p.slug}`}
+          title={p.data.title}
+          subtitle={p.data.subtitle}
+          image={p.data.heroImage}
+          tags={p.data.tags}
+          featured={p.data.featured}
+        />
+      ))}
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>

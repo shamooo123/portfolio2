@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #020617; }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+
+.glass-panel {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Simple markdown typography (no Tailwind typography plugin) */
+.project-content :is(h2,h3) {
+  color: white;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.project-content h2 { font-size: 1.5rem; }
+.project-content h3 { font-size: 1.25rem; font-weight: 700; }
+.project-content p { margin: 0.75rem 0; }
+.project-content ul { margin: 0.75rem 0 0.75rem 1.25rem; list-style: disc; }
+.project-content li { margin: 0.25rem 0; }
+.project-content a { color: #60a5fa; text-decoration: underline; text-underline-offset: 4px; }

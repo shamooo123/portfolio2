@@ -1,0 +1,66 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import TagPill from "../../components/TagPill.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  return projects.map((p) => ({ params: { slug: p.slug }, props: { project: p } }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+
+const title = `${project.data.title} | Case Study — Hishaam Ali Abbasi`;
+const description = project.data.subtitle ?? "Project case study.";
+const hero = project.data.heroImage ?? "/images/project1.jpg";
+---
+
+<BaseLayout title={title} description={description} image={hero} canonicalPath={`/projects/${project.slug}/`}>
+  <div class="fixed inset-0 z-0 pointer-events-none">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(56,189,248,0.04),transparent_55%)]"></div>
+    <div class="absolute inset-0" style="background-image: radial-gradient(rgba(148, 163, 184, 0.05) 1px, transparent 1px); background-size: 40px 40px;"></div>
+  </div>
+
+  <Nav />
+
+  <main class="relative z-10 pt-28 pb-10 px-6 max-w-4xl mx-auto">
+    <a href="/projects" class="text-sm text-blue-400 hover:underline">← Back to case studies</a>
+
+    <header class="mt-6">
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white">{project.data.title}</h1>
+      {project.data.subtitle && <p class="mt-3 text-slate-400 text-lg">{project.data.subtitle}</p>}
+
+      <div class="mt-5 flex flex-wrap gap-2">
+        {project.data.tags?.map((t) => <TagPill label={t} />)}
+      </div>
+
+      <div class="mt-6 grid sm:grid-cols-3 gap-4 text-sm text-slate-400">
+        {project.data.timeline && <div class="glass-panel rounded-xl p-4"><div class="text-slate-300 font-semibold mb-1">Timeline</div>{project.data.timeline}</div>}
+        {project.data.role && <div class="glass-panel rounded-xl p-4"><div class="text-slate-300 font-semibold mb-1">Role</div>{project.data.role}</div>}
+        <div class="glass-panel rounded-xl p-4">
+          <div class="text-slate-300 font-semibold mb-1">Links</div>
+          <div class="flex flex-col gap-1">
+            {project.data.links?.repo && <a class="text-blue-400 hover:underline" href={project.data.links.repo} target="_blank" rel="noopener noreferrer">Repo ↗</a>}
+            {project.data.links?.report && <a class="text-blue-400 hover:underline" href={project.data.links.report} target="_blank" rel="noopener noreferrer">Report ↗</a>}
+            {project.data.links?.demo && <a class="text-blue-400 hover:underline" href={project.data.links.demo} target="_blank" rel="noopener noreferrer">Demo ↗</a>}
+          </div>
+        </div>
+      </div>
+
+      {hero && (
+        <div class="mt-8 glass-panel rounded-2xl overflow-hidden">
+          <img src={hero} alt={project.data.title} class="w-full h-auto object-cover" />
+        </div>
+      )}
+    </header>
+
+    <article class="mt-10 space-y-4 text-slate-300 leading-relaxed project-content">
+      <Content />
+    </article>
+  </main>
+
+  <Footer />
+</BaseLayout>
