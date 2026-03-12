@@ -5,34 +5,25 @@ const {
   class: className = "",
 } = Astro.props;
 
-// Pass the words to the client script via a data-* attribute (Astro-recommended).
 const wordsJson = JSON.stringify(words);
-
-// A stable, non-animated alternative for screen readers.
-const srText = `${prefix} ${words.join(', ')}.`;
+const srText = `${prefix} ${words.join(", ")}.`;
 ---
 
 <div class={`typewriter ${className}`} data-typewriter data-words={wordsJson} data-prefix={prefix}>
   <span class="typewriter__prefix">{prefix}&nbsp;</span>
-
-  <!-- Animated text is hidden from screen readers to avoid constant announcements. -->
   <span class="typewriter__word" aria-hidden="true" data-typewriter-word></span>
   <span class="typewriter__caret" aria-hidden="true"></span>
-
   <span class="sr-only">{srText}</span>
 </div>
 
 <script>
-  // Vanilla typewriter effect.
-  // Respects prefers-reduced-motion.
-  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduceMotion =
+    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const root = document.currentScript?.previousElementSibling;
 
-  if (!root || !(root instanceof HTMLElement)) {
-    // nothing
-  } else {
-    const target = root.querySelector('[data-typewriter-word]');
-    const raw = root.dataset.words || '[]';
+  if (root && root instanceof HTMLElement) {
+    const target = root.querySelector("[data-typewriter-word]");
+    const raw = root.dataset.words || "[]";
 
     let words;
     try {
@@ -80,7 +71,6 @@ const srText = `${prefix} ${words.join(', ')}.`;
         }
       };
 
-      // Start with a tiny delay so layout is stable.
       setTimeout(tick, 150);
     }
   }
