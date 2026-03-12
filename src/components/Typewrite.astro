@@ -1,0 +1,87 @@
+---
+const {
+  prefix = "I’m a",
+  words = ["Robotics Engineer", "Embedded Developer", "Rapid Prototyper"],
+  class: className = "",
+} = Astro.props;
+
+// Pass the words to the client script via a data-* attribute (Astro-recommended).
+const wordsJson = JSON.stringify(words);
+
+// A stable, non-animated alternative for screen readers.
+const srText = `${prefix} ${words.join(', ')}.`;
+---
+
+<div class={`typewriter ${className}`} data-typewriter data-words={wordsJson} data-prefix={prefix}>
+  <span class="typewriter__prefix">{prefix}&nbsp;</span>
+
+  <!-- Animated text is hidden from screen readers to avoid constant announcements. -->
+  <span class="typewriter__word" aria-hidden="true" data-typewriter-word></span>
+  <span class="typewriter__caret" aria-hidden="true"></span>
+
+  <span class="sr-only">{srText}</span>
+</div>
+
+<script>
+  // Vanilla typewriter effect.
+  // Respects prefers-reduced-motion.
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const root = document.currentScript?.previousElementSibling;
+
+  if (!root || !(root instanceof HTMLElement)) {
+    // nothing
+  } else {
+    const target = root.querySelector('[data-typewriter-word]');
+    const raw = root.dataset.words || '[]';
+
+    let words;
+    try {
+      words = JSON.parse(raw);
+    } catch {
+      words = [];
+    }
+
+    if (!target || !Array.isArray(words) || words.length === 0) {
+      // nothing
+    } else if (reduceMotion) {
+      target.textContent = String(words[0]);
+    } else {
+      let wordIndex = 0;
+      let charIndex = 0;
+      let deleting = false;
+
+      const TYPE_SPEED = 55;
+      const DELETE_SPEED = 35;
+      const HOLD_MS = 1000;
+      const BETWEEN_MS = 200;
+
+      const tick = () => {
+        const current = String(words[wordIndex % words.length]);
+
+        if (!deleting) {
+          charIndex++;
+          target.textContent = current.slice(0, charIndex);
+          if (charIndex >= current.length) {
+            deleting = true;
+            setTimeout(tick, HOLD_MS);
+            return;
+          }
+          setTimeout(tick, TYPE_SPEED);
+        } else {
+          charIndex--;
+          target.textContent = current.slice(0, Math.max(0, charIndex));
+          if (charIndex <= 0) {
+            deleting = false;
+            wordIndex++;
+            setTimeout(tick, BETWEEN_MS);
+            return;
+          }
+          setTimeout(tick, DELETE_SPEED);
+        }
+      };
+
+      // Start with a tiny delay so layout is stable.
+      setTimeout(tick, 150);
+    }
+  }
+</script>
