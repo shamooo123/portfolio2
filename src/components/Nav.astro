@@ -1,30 +1,168 @@
 ---
+import { SOCIAL, SITE } from "../site-config";
+
 const nav = [
   { href: "/#about", label: "About" },
   { href: "/#projects", label: "Projects" },
   { href: "/#experience", label: "Experience" },
   { href: "/projects", label: "Case studies" },
 ];
+
+const icons = {
+  github: `
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.77.6-3.36-1.17-3.36-1.17-.45-1.15-1.1-1.46-1.1-1.46-.9-.62.07-.61.07-.61 1 .07 1.52 1.03 1.52 1.03.9 1.52 2.36 1.08 2.94.82.09-.65.35-1.08.64-1.33-2.21-.25-4.54-1.1-4.54-4.92 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.6 9.6 0 0 1 5 0c1.9-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.83-2.33 4.67-4.55 4.92.36.31.68.92.68 1.85v2.74c0 .26.18.58.69.48A10 10 0 0 0 12 2Z"/>
+    </svg>`,
+  linkedin: `
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5ZM.5 8h4V24h-4V8Zm7.5 0h3.8v2.2h.06c.53-1 1.83-2.2 3.77-2.2 4.03 0 4.77 2.65 4.77 6.1V24h-4v-8.6c0-2.05-.04-4.68-2.85-4.68-2.86 0-3.3 2.23-3.3 4.53V24h-4V8Z"/>
+    </svg>`,
+  youtube: `
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M23.5 6.2a3.1 3.1 0 0 0-2.2-2.2C19.3 3.5 12 3.5 12 3.5s-7.3 0-9.3.5A3.1 3.1 0 0 0 .5 6.2 32.2 32.2 0 0 0 0 12s0 3.3.5 5.8a3.1 3.1 0 0 0 2.2 2.2c2 .5 9.3.5 9.3.5s7.3 0 9.3-.5a3.1 3.1 0 0 0 2.2-2.2c.5-2.5.5-5.8.5-5.8s0-3.3-.5-5.8ZM9.6 15.5V8.5L15.9 12l-6.3 3.5Z"/>
+    </svg>`,
+  instagram: `
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3Zm-5 3.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5Zm0 2A2.5 2.5 0 1 0 14.5 12 2.5 2.5 0 0 0 12 9.5ZM17.8 6.2a1 1 0 1 1-1 1 1 1 0 0 1 1-1Z"/>
+    </svg>`,
+};
 ---
 <nav class="fixed top-0 w-full z-50 glass-panel border-b-0 border-b-white/5">
-  <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
     <a href="/" class="text-lg font-bold tracking-tight text-white">
       H.A. <span class="text-blue-500">Abbasi</span>
     </a>
 
+    <!-- Desktop links -->
     <div class="hidden md:flex gap-8 text-sm font-medium text-slate-400">
       {nav.map((item) => (
         <a href={item.href} class="hover:text-blue-400 transition-colors">{item.label}</a>
       ))}
     </div>
 
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-2">
+      <!-- Social icons (desktop) -->
+      <div class="hidden md:flex items-center gap-2">
+        <a href={SOCIAL.github} target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg text-slate-300 hover:text-blue-400 hover:bg-white/5 transition" aria-label="GitHub">
+          <span class="w-5 h-5 block" set:html={icons.github}></span>
+        </a>
+        <a href={SOCIAL.linkedin} target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg text-slate-300 hover:text-blue-400 hover:bg-white/5 transition" aria-label="LinkedIn">
+          <span class="w-5 h-5 block" set:html={icons.linkedin}></span>
+        </a>
+        <a href={SOCIAL.youtube} target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg text-slate-300 hover:text-blue-400 hover:bg-white/5 transition" aria-label="YouTube">
+          <span class="w-5 h-5 block" set:html={icons.youtube}></span>
+        </a>
+        <a href={SOCIAL.instagram} target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg text-slate-300 hover:text-blue-400 hover:bg-white/5 transition" aria-label="Instagram">
+          <span class="w-5 h-5 block" set:html={icons.instagram}></span>
+        </a>
+      </div>
+
       <a href="/assets/Hishaam_Ali_Abbasi_CV.pdf" class="hidden sm:inline-flex px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-xs font-medium text-white transition-all">
         Download CV
       </a>
-      <a href="mailto:hishaamabbasi@gmail.com" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-full text-xs font-semibold text-white transition-all">
+
+      <a href={`mailto:${SITE.email}`} class="hidden sm:inline-flex px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-full text-xs font-semibold text-white transition-all">
         Get in touch
       </a>
+
+      <!-- Mobile menu button -->
+      <button
+        id="navToggle"
+        class="md:hidden inline-flex items-center justify-center p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobileNav"
+        type="button"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5" aria-hidden="true">
+          <path d="M4 6h16" />
+          <path d="M4 12h16" />
+          <path d="M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile dropdown -->
+  <div id="mobileNav" class="md:hidden hidden border-t border-white/5 bg-slate-950/70 backdrop-blur">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4">
+      <div class="grid gap-2">
+        {nav.map((item) => (
+          <a href={item.href} class="px-3 py-2 rounded-lg text-slate-200 hover:bg-white/5 transition" data-mobile-nav-link>
+            {item.label}
+          </a>
+        ))}
+      </div>
+
+      <div class="mt-4 flex flex-wrap gap-2">
+        <a href={SOCIAL.github} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-sm text-white transition">
+          <span class="w-4 h-4 block" set:html={icons.github}></span>
+          GitHub
+        </a>
+        <a href={SOCIAL.linkedin} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-sm text-white transition">
+          <span class="w-4 h-4 block" set:html={icons.linkedin}></span>
+          LinkedIn
+        </a>
+        <a href={SOCIAL.youtube} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-sm text-white transition">
+          <span class="w-4 h-4 block" set:html={icons.youtube}></span>
+          YouTube
+        </a>
+        <a href={SOCIAL.instagram} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-sm text-white transition">
+          <span class="w-4 h-4 block" set:html={icons.instagram}></span>
+          Instagram
+        </a>
+      </div>
+
+      <div class="mt-4 flex flex-col sm:flex-row gap-2">
+        <a href="/assets/Hishaam_Ali_Abbasi_CV.pdf" class="inline-flex justify-center px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-sm font-medium text-white transition">
+          Download CV
+        </a>
+        <a href={`mailto:${SITE.email}`} class="inline-flex justify-center px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-sm font-semibold text-white transition">
+          Get in touch
+        </a>
+      </div>
     </div>
   </div>
 </nav>
+
+<script>
+  const btn = document.getElementById('navToggle');
+  const panel = document.getElementById('mobileNav');
+
+  const closeMenu = () => {
+    if (!btn || !panel) return;
+    panel.classList.add('hidden');
+    btn.setAttribute('aria-expanded', 'false');
+  };
+
+  const toggleMenu = () => {
+    if (!btn || !panel) return;
+    const isHidden = panel.classList.contains('hidden');
+    if (isHidden) {
+      panel.classList.remove('hidden');
+      btn.setAttribute('aria-expanded', 'true');
+    } else {
+      closeMenu();
+    }
+  };
+
+  btn?.addEventListener('click', toggleMenu);
+
+  // Close when tapping a link.
+  panel?.querySelectorAll('[data-mobile-nav-link]').forEach((a) => {
+    a.addEventListener('click', () => closeMenu());
+  });
+
+  // Close on Escape.
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMenu();
+  });
+
+  // Close when clicking outside.
+  document.addEventListener('click', (e) => {
+    if (!panel || !btn) return;
+    const t = e.target;
+    if (!(t instanceof Node)) return;
+    if (!panel.contains(t) && !btn.contains(t)) closeMenu();
+  });
+</script>
