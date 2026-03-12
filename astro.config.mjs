@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 
 export default defineConfig({
-  // Used for canonical URLs + social preview meta
+  // Used for canonical URLs + social previews
   site: 'https://hishaamabbasi.co.uk',
 
   integrations: [
