@@ -2,17 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: dark;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-}
+:root { color-scheme: dark; }
+html { scroll-behavior: smooth; }
+body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
 
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: #020617; }
@@ -24,23 +16,23 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.no-scrollbar{scrollbar-width:none;-ms-overflow-style:none;}
-.no-scrollbar::-webkit-scrollbar{display:none;}
+/* Guaranteed screen-reader-only utility (so fallback never appears visually) */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
 
 /* Typewriter */
-.typewriter {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0;
-  color: rgba(226, 232, 240, 0.95);
-}
-.typewriter__prefix {
-  color: rgba(148, 163, 184, 1);
-}
-.typewriter__word {
-  font-weight: 800;
-  color: white;
-}
+.typewriter { display: inline-flex; align-items: baseline; }
+.typewriter__prefix { color: rgba(148, 163, 184, 1); }
+.typewriter__word { font-weight: 800; color: #fff; }
 .typewriter__caret {
   display: inline-block;
   width: 0.6ch;
@@ -49,49 +41,17 @@ body {
   transform: translateY(0.1em);
   animation: caretBlink 1s step-end infinite;
 }
-@keyframes caretBlink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
-}
+@keyframes caretBlink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
 
-/* Scroll reveal (subtle) */
-.reveal {
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 700ms ease, transform 700ms ease;
-}
-.reveal.reveal-in {
-  opacity: 1;
-  transform: none;
-}
+/* Scroll reveal */
+.reveal { opacity: 0; transform: translateY(10px); transition: opacity 700ms ease, transform 700ms ease; }
+.reveal.reveal-in { opacity: 1; transform: none; }
+
+.no-scrollbar{scrollbar-width:none;-ms-overflow-style:none;}
+.no-scrollbar::-webkit-scrollbar{display:none;}
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-
-  * {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
-  }
-
-  .reveal {
-    opacity: 1;
-    transform: none;
-  }
+  * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  .reveal { opacity: 1; transform: none; }
 }
-
-/* Simple markdown typography (no Tailwind typography plugin) */
-.project-content :is(h2,h3) {
-  color: white;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
-}
-.project-content h2 { font-size: 1.5rem; }
-.project-content h3 { font-size: 1.25rem; font-weight: 700; }
-.project-content p { margin: 0.75rem 0; }
-.project-content ul { margin: 0.75rem 0 0.75rem 1.25rem; list-style: disc; }
-.project-content li { margin: 0.25rem 0; }
-.project-content a { color: #60a5fa; text-decoration: underline; text-underline-offset: 4px; }
