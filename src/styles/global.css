@@ -16,7 +16,9 @@ body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-seri
   border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-/* Guaranteed screen-reader-only utility (so fallback never appears visually) */
+.no-scrollbar{scrollbar-width:none;-ms-overflow-style:none;}
+.no-scrollbar::-webkit-scrollbar{display:none;}
+
 .sr-only {
   position: absolute !important;
   width: 1px !important;
@@ -43,15 +45,22 @@ body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-seri
 }
 @keyframes caretBlink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
 
-/* Scroll reveal */
-.reveal { opacity: 0; transform: translateY(10px); transition: opacity 700ms ease, transform 700ms ease; }
-.reveal.reveal-in { opacity: 1; transform: none; }
-
-.no-scrollbar{scrollbar-width:none;-ms-overflow-style:none;}
-.no-scrollbar::-webkit-scrollbar{display:none;}
+/* Mouse spotlight */
+#cursorSpot {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.9;
+  background: radial-gradient(
+    600px circle at var(--mx, 50%) var(--my, 30%),
+    rgba(56, 189, 248, 0.08),
+    transparent 55%
+  );
+}
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
-  .reveal { opacity: 1; transform: none; }
+  #cursorSpot { display: none; }
 }
