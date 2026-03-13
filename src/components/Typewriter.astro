@@ -2,7 +2,7 @@
 const {
   prefix = "I’m a",
   words = ["Robotics Engineer", "Embedded Developer", "Rapid Prototyper"],
-  forceAnimate = false,
+  forceAnimate = true,
   class: className = "",
 } = Astro.props;
 
@@ -18,8 +18,12 @@ const srText = `${prefix} ${words.join(", ")}.`;
   data-force={forceAnimate ? "1" : "0"}
 >
   <span class="typewriter__prefix">{prefix}&nbsp;</span>
-  <span class="typewriter__word" aria-hidden="true"></span>
-  <span class="typewriter__caret" aria-hidden="true"></span>
+
+  <!-- Leading underscore cursor -->
+  <span class="typewriter__cursor" aria-hidden="true" data-tw-cursor>_</span>
+
+  <!-- The typed text -->
+  <span class="typewriter__word" aria-hidden="true" data-tw-word></span>
 
   <span class="sr-only">{srText}</span>
 </div>
@@ -29,8 +33,9 @@ const srText = `${prefix} ${words.join(", ")}.`;
     document.querySelectorAll("[data-typewriter]").forEach((root) => {
       if (!(root instanceof HTMLElement)) return;
 
-      const target = root.querySelector(".typewriter__word");
-      if (!target) return;
+      const cursor = root.querySelector("[data-tw-cursor]");
+      const wordEl = root.querySelector("[data-tw-word]");
+      if (!cursor || !wordEl) return;
 
       let words = [];
       try {
@@ -46,45 +51,81 @@ const srText = `${prefix} ${words.join(", ")}.`;
         window.matchMedia &&
         window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+      // If reduced motion, show a stable first word.
       if (reduceMotion) {
-        target.textContent = String(words[0]);
+        wordEl.textContent = String(words[0]);
+        cursor.classList.add("tw-cursor-blink");
         return;
       }
 
+      // Timing
+      const TYPE_SPEED = 55;
+      const DELETE_SPEED = 35;
+      const HOLD_MS = 700;
+
+      // Blink underscore a couple times after full word typed
+      const BLINKS_AFTER_FULL = 2;      // "a couple"
+      const BLINK_MS = 260;
+
+      // State
       let wordIndex = 0;
       let charIndex = 0;
       let deleting = false;
 
-      const TYPE_SPEED = 55;
-      const DELETE_SPEED = 35;
-      const HOLD_MS = 900;
-      const BETWEEN_MS = 200;
+      const setCursorBlink = (on) => {
+        cursor.classList.toggle("tw-cursor-blink", on);
+      };
 
-      const tick = () => {
+      const blinkCursorTimes = async (count) => {
+        setCursorBlink(false); // we'll do manual blink
+        for (let i = 0; i < count; i++) {
+          cursor.classList.add("tw-cursor-hidden");
+          await new Promise((r) => setTimeout(r, BLINK_MS));
+          cursor.classList.remove("tw-cursor-hidden");
+          await new Promise((r) => setTimeout(r, BLINK_MS));
+        }
+      };
+
+      const tick = async () => {
         const current = String(words[wordIndex % words.length]);
 
         if (!deleting) {
+          setCursorBlink(false);
           charIndex++;
-          target.textContent = current.slice(0, charIndex);
+          wordEl.textContent = current.slice(0, charIndex);
+
           if (charIndex >= current.length) {
-            deleting = true;
-            setTimeout(tick, HOLD_MS);
+            // finished typing -> blink underscore a couple times -> hold -> start deleting
+            await blinkCursorTimes(BLINKS_AFTER_FULL);
+            setCursorBlink(true);
+            setTimeout(() => {
+              setCursorBlink(false);
+              deleting = true;
+              tick();
+            }, HOLD_MS);
             return;
           }
+
           setTimeout(tick, TYPE_SPEED);
         } else {
+          setCursorBlink(false);
           charIndex--;
-          target.textContent = current.slice(0, Math.max(0, charIndex));
+          wordEl.textContent = current.slice(0, Math.max(0, charIndex));
+
           if (charIndex <= 0) {
             deleting = false;
             wordIndex++;
-            setTimeout(tick, BETWEEN_MS);
+            setTimeout(tick, 180);
             return;
           }
+
           setTimeout(tick, DELETE_SPEED);
         }
       };
 
+      // Start
+      cursor.classList.remove("tw-cursor-hidden");
+      setCursorBlink(false);
       setTimeout(tick, 150);
     });
   };
