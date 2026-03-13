@@ -19,23 +19,26 @@ const srText = `${prefix} ${words.join(", ")}.`;
 >
   <span class="typewriter__prefix">{prefix}&nbsp;</span>
 
-  <!-- Leading underscore cursor -->
-  <span class="typewriter__cursor" aria-hidden="true" data-tw-cursor>_</span>
+  <!-- Leading cursor underscore -->
+  <span class="typewriter__cursor" aria-hidden="true" data-cursor>_</span>
 
-  <!-- The typed text -->
-  <span class="typewriter__word" aria-hidden="true" data-tw-word></span>
+  <!-- Typed text -->
+  <span class="typewriter__word" aria-hidden="true" data-word></span>
 
   <span class="sr-only">{srText}</span>
 </div>
 
 <script is:inline>
-  const boot = () => {
-    document.querySelectorAll("[data-typewriter]").forEach((root) => {
-      if (!(root instanceof HTMLElement)) return;
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-      const cursor = root.querySelector("[data-tw-cursor]");
-      const wordEl = root.querySelector("[data-tw-word]");
-      if (!cursor || !wordEl) return;
+  const boot = async () => {
+    const roots = document.querySelectorAll("[data-typewriter]");
+    for (const root of roots) {
+      if (!(root instanceof HTMLElement)) continue;
+
+      const cursor = root.querySelector("[data-cursor]");
+      const wordEl = root.querySelector("[data-word]");
+      if (!(cursor instanceof HTMLElement) || !(wordEl instanceof HTMLElement)) continue;
 
       let words = [];
       try {
@@ -43,7 +46,7 @@ const srText = `${prefix} ${words.join(", ")}.`;
       } catch {
         words = [];
       }
-      if (!Array.isArray(words) || words.length === 0) return;
+      if (!Array.isArray(words) || words.length === 0) continue;
 
       const force = root.getAttribute("data-force") === "1";
       const reduceMotion =
@@ -51,83 +54,48 @@ const srText = `${prefix} ${words.join(", ")}.`;
         window.matchMedia &&
         window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      // If reduced motion, show a stable first word.
       if (reduceMotion) {
         wordEl.textContent = String(words[0]);
-        cursor.classList.add("tw-cursor-blink");
-        return;
+        cursor.classList.add("typewriter__cursor--idle");
+        continue;
       }
 
-      // Timing
       const TYPE_SPEED = 55;
       const DELETE_SPEED = 35;
-      const HOLD_MS = 700;
+      const HOLD_MS = 600;
 
-      // Blink underscore a couple times after full word typed
-      const BLINKS_AFTER_FULL = 2;      // "a couple"
-      const BLINK_MS = 260;
+      const blinkCursor = async (times = 2) => {
+        cursor.classList.add("typewriter__cursor--blink");
+        // each blink cycle is 350ms (see CSS); blink twice means ~700ms.
+        await sleep(times * 700);
+        cursor.classList.remove("typewriter__cursor--blink");
+      };
 
-      // State
       let wordIndex = 0;
-      let charIndex = 0;
-      let deleting = false;
 
-      const setCursorBlink = (on) => {
-        cursor.classList.toggle("tw-cursor-blink", on);
-      };
-
-      const blinkCursorTimes = async (count) => {
-        setCursorBlink(false); // we'll do manual blink
-        for (let i = 0; i < count; i++) {
-          cursor.classList.add("tw-cursor-hidden");
-          await new Promise((r) => setTimeout(r, BLINK_MS));
-          cursor.classList.remove("tw-cursor-hidden");
-          await new Promise((r) => setTimeout(r, BLINK_MS));
-        }
-      };
-
-      const tick = async () => {
+      while (true) {
         const current = String(words[wordIndex % words.length]);
 
-        if (!deleting) {
-          setCursorBlink(false);
-          charIndex++;
-          wordEl.textContent = current.slice(0, charIndex);
-
-          if (charIndex >= current.length) {
-            // finished typing -> blink underscore a couple times -> hold -> start deleting
-            await blinkCursorTimes(BLINKS_AFTER_FULL);
-            setCursorBlink(true);
-            setTimeout(() => {
-              setCursorBlink(false);
-              deleting = true;
-              tick();
-            }, HOLD_MS);
-            return;
-          }
-
-          setTimeout(tick, TYPE_SPEED);
-        } else {
-          setCursorBlink(false);
-          charIndex--;
-          wordEl.textContent = current.slice(0, Math.max(0, charIndex));
-
-          if (charIndex <= 0) {
-            deleting = false;
-            wordIndex++;
-            setTimeout(tick, 180);
-            return;
-          }
-
-          setTimeout(tick, DELETE_SPEED);
+        // TYPE
+        for (let i = 1; i <= current.length; i++) {
+          wordEl.textContent = current.slice(0, i);
+          await sleep(TYPE_SPEED);
         }
-      };
 
-      // Start
-      cursor.classList.remove("tw-cursor-hidden");
-      setCursorBlink(false);
-      setTimeout(tick, 150);
-    });
+        // HOLD + blink underscore twice
+        await sleep(HOLD_MS);
+        await blinkCursor(2);
+
+        // DELETE
+        for (let i = current.length - 1; i >= 0; i--) {
+          wordEl.textContent = current.slice(0, i);
+          await sleep(DELETE_SPEED);
+        }
+
+        wordIndex++;
+        await sleep(180);
+      }
+    }
   };
 
   if (document.readyState === "loading") {
