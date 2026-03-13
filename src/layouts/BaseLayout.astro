@@ -1,48 +1,81 @@
 ---
 import "../styles/global.css";
+import { SITE } from "../site-config";
+
 const {
-  title = "Hishaam Ali Abbasi | Robotics Engineer & Developer",
-  description = "Portfolio of Hishaam Ali Abbasi — Robotics Engineering student focused on control, embedded systems, and hardware/software integration.",
-  canonicalPath = Astro.url.pathname,
-  image = "/images/profile.jpg",
-  noindex = false
+  title = SITE.name,
+  description = "Portfolio site",
 } = Astro.props;
 
-const canonical = new URL(canonicalPath, Astro.site).toString();
-const ogImage = new URL(image, Astro.site).toString();
+const canonical = new URL(Astro.url.pathname, SITE.domain).toString();
 ---
+
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="author" content="Hishaam Ali Abbasi" />
     <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex,nofollow" />}
-
-    <!-- OpenGraph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Hishaam Ali Abbasi" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={ogImage} />
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImage} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=Fira+Code&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap"
+      rel="stylesheet"
+    />
 
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+
+    <meta name="twitter:card" content="summary_large_image" />
   </head>
+
   <body class="bg-slate-950 text-slate-200 selection:bg-blue-500 selection:text-white antialiased">
+    <div id="cursorSpot"></div>
+
     <slot />
+
+    <script is:inline>
+      const reduce =
+        window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduce) {
+        // no spotlight
+      } else {
+        const spot = document.getElementById("cursorSpot");
+        if (!spot) return;
+
+        let tx = window.innerWidth * 0.5;
+        let ty = window.innerHeight * 0.3;
+        let x = tx;
+        let y = ty;
+
+        const onMove = (e) => {
+          tx = e.clientX;
+          ty = e.clientY;
+        };
+
+        window.addEventListener("mousemove", onMove, { passive: true });
+
+        const loop = () => {
+          x += (tx - x) * 0.12;
+          y += (ty - y) * 0.12;
+
+          const mx = (x / window.innerWidth) * 100;
+          const my = (y / window.innerHeight) * 100;
+
+          spot.style.setProperty("--mx", mx.toFixed(2) + "%");
+          spot.style.setProperty("--my", my.toFixed(2) + "%");
+
+          window.requestAnimationFrame(loop);
+        };
+
+        window.requestAnimationFrame(loop);
+      }
+    </script>
   </body>
 </html>
