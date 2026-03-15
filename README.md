@@ -78,9 +78,3 @@ I am always open to chatting about robotics, 3D printing, or exciting engineerin
 <p align="center">
 <i>Designed and built by Hishaam Ali Abbasi</i>
 </p>
-
-```
-
-Let me know how this one renders\! Would you like me to tackle a README for your **Fracture Immobilisation Trainer** or the **Active Camera Gimbal** next?
-
-```
