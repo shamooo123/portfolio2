@@ -1,8 +1,8 @@
 ---
 title: "Formula Student Suspension"
 subtitle: "Suspension optimisation and redesign work using CAD + Ansys to balance grip, stiffness, and durability."
-featured: true
-order: 4
+featured: false
+order: 7
 timeline: "Oct 2023 – Present"
 role: "Suspension analysis • CAD/CAE • cross-team collaboration"
 tags: ["Ansys", "CAD", "Vehicle Dynamics", "FEA"]

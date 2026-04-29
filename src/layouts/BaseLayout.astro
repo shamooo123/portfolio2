@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import { SITE } from "../site-config";
+import DotField from "../components/DotField.astro";
 
 const {
   title = SITE.name,
@@ -15,121 +16,25 @@ const canonical = new URL(Astro.url.pathname, SITE.domain).toString();
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap"
       rel="stylesheet"
     />
-
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
-
     <meta name="twitter:card" content="summary_large_image" />
   </head>
-
   <body class="bg-slate-950 text-slate-200 selection:bg-blue-500 selection:text-white antialiased">
-    <!-- Dot field (behind everything) -->
-    <canvas id="dotField"></canvas>
-
-    <!-- Your page content -->
+    <DotField />
     <div class="relative z-10">
       <slot />
     </div>
-
-    <script is:inline>
-      const reduce =
-        window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (reduce) {
-        // Disabled
-      } else {
-        const canvas = document.getElementById("dotField");
-        if (!(canvas instanceof HTMLCanvasElement)) return;
-
-        const ctx = canvas.getContext("2d", { alpha: true });
-        if (!ctx) return;
-
-        const DPR = Math.min(2, window.devicePixelRatio || 1);
-
-        // Subtle parameters
-        const SPACING = 28;           // dot grid spacing (px)
-        const BASE_R = 1.05;          // base dot radius
-        const BOOST_R = 0.75;         // extra radius near mouse
-        const INFLUENCE = 140;        // distance where mouse affects dots
-        const PULL = 10;              // max pixel pull towards mouse
-        const BASE_ALPHA = 0.10;      // default dot visibility
-        const BOOST_ALPHA = 0.22;     // extra brightness near mouse
-
-        let w = 0, h = 0;
-        let mouseX = -9999, mouseY = -9999;
-
-        const resize = () => {
-          w = window.innerWidth;
-          h = window.innerHeight;
-          canvas.width = Math.floor(w * DPR);
-          canvas.height = Math.floor(h * DPR);
-          canvas.style.width = w + "px";
-          canvas.style.height = h + "px";
-          ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-        };
-
-        const onMove = (e) => {
-          mouseX = e.clientX;
-          mouseY = e.clientY;
-        };
-
-        const onLeave = () => {
-          mouseX = -9999;
-          mouseY = -9999;
-        };
-
-        window.addEventListener("resize", resize, { passive: true });
-        window.addEventListener("mousemove", onMove, { passive: true });
-        window.addEventListener("mouseleave", onLeave, { passive: true });
-
-        resize();
-
-        const draw = () => {
-          ctx.clearRect(0, 0, w, h);
-
-          // Keep it subtle: draw only dots, no lines.
-          // Use a cool blue tint that matches your theme.
-          for (let y = 0; y <= h + SPACING; y += SPACING) {
-            for (let x = 0; x <= w + SPACING; x += SPACING) {
-              const dx = mouseX - x;
-              const dy = mouseY - y;
-              const d = Math.hypot(dx, dy);
-
-              // Normalized influence 0..1
-              const t = Math.max(0, 1 - d / INFLUENCE);
-
-              // Pull slightly towards mouse
-              const pull = t * PULL;
-              const px = x + (dx / (d || 1)) * pull;
-              const py = y + (dy / (d || 1)) * pull;
-
-              const r = BASE_R + t * BOOST_R;
-              const a = BASE_ALPHA + t * BOOST_ALPHA;
-
-              ctx.beginPath();
-              ctx.arc(px, py, r, 0, Math.PI * 2);
-              ctx.fillStyle = `rgba(96, 165, 250, ${a})`;
-              ctx.fill();
-            }
-          }
-
-          window.requestAnimationFrame(draw);
-        };
-
-        window.requestAnimationFrame(draw);
-      }
-    </script>
   </body>
 </html>

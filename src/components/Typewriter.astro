@@ -1,6 +1,6 @@
 ---
 const {
-  prefix = "I’m a",
+  prefix = "I'm a",
   words = ["Robotics Engineer", "Embedded Developer", "Rapid Prototyper"],
   forceAnimate = true,
   class: className = "",
@@ -18,13 +18,8 @@ const srText = `${prefix} ${words.join(", ")}.`;
   data-force={forceAnimate ? "1" : "0"}
 >
   <span class="typewriter__prefix">{prefix}&nbsp;</span>
-
-  <!-- Leading cursor underscore -->
-  <span class="typewriter__cursor" aria-hidden="true" data-cursor>_</span>
-
-  <!-- Typed text -->
   <span class="typewriter__word" aria-hidden="true" data-word></span>
-
+  <span class="typewriter__cursor typewriter__cursor--blink" aria-hidden="true" data-cursor>_</span>
   <span class="sr-only">{srText}</span>
 </div>
 
@@ -56,25 +51,20 @@ const srText = `${prefix} ${words.join(", ")}.`;
 
       if (reduceMotion) {
         wordEl.textContent = String(words[0]);
-        cursor.classList.add("typewriter__cursor--idle");
         continue;
       }
 
       const TYPE_SPEED = 55;
       const DELETE_SPEED = 35;
-      const HOLD_MS = 600;
-
-      const blinkCursor = async (times = 2) => {
-        cursor.classList.add("typewriter__cursor--blink");
-        // each blink cycle is 350ms (see CSS); blink twice means ~700ms.
-        await sleep(times * 700);
-        cursor.classList.remove("typewriter__cursor--blink");
-      };
+      const HOLD_MS = 1200;
 
       let wordIndex = 0;
 
       while (true) {
         const current = String(words[wordIndex % words.length]);
+
+        // Stop blinking while typing
+        cursor.classList.remove("typewriter__cursor--blink");
 
         // TYPE
         for (let i = 1; i <= current.length; i++) {
@@ -82,9 +72,10 @@ const srText = `${prefix} ${words.join(", ")}.`;
           await sleep(TYPE_SPEED);
         }
 
-        // HOLD + blink underscore twice
+        // HOLD — blink cursor while paused
+        cursor.classList.add("typewriter__cursor--blink");
         await sleep(HOLD_MS);
-        await blinkCursor(2);
+        cursor.classList.remove("typewriter__cursor--blink");
 
         // DELETE
         for (let i = current.length - 1; i >= 0; i--) {

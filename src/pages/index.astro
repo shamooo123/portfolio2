@@ -10,7 +10,7 @@ import { TYPEWRITER_WORDS, SOCIAL } from "../site-config";
 const projects = (await getCollection("projects"))
   .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
 
-const featured = [...projects.filter(p => p.data.featured), ...projects.filter(p => !p.data.featured)].slice(0, 4);
+const featured = [...projects.filter(p => p.data.featured), ...projects.filter(p => !p.data.featured)].slice(0, 6);
 ---
 
 <BaseLayout
@@ -19,7 +19,6 @@ const featured = [...projects.filter(p => p.data.featured), ...projects.filter(p
 >
   <div class="fixed inset-0 z-0 pointer-events-none">
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(56,189,248,0.03),transparent_50%)]"></div>
-    <div class="absolute inset-0" style="background-image: radial-gradient(rgba(148, 163, 184, 0.05) 1px, transparent 1px); background-size: 40px 40px;"></div>
   </div>
 
   <Nav />
@@ -119,8 +118,11 @@ const featured = [...projects.filter(p => p.data.featured), ...projects.filter(p
                 <a href="/assets/HEAR_Hishaam_Ali_Abbasi.pdf" class="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs font-medium text-white transition-all">
                   Download HEAR
                 </a>
-                <a href="/assets/Hishaam_Ali_Abbasi_CV.pdf" class="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs font-medium text-white transition-all">
-                  Download CV
+                <a href="/assets/cv_1page.pdf" class="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs font-medium text-white transition-all">
+                  CV (1 page)
+                </a>
+                <a href="/assets/cv_2page.pdf" class="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs font-medium text-white transition-all">
+                  CV (2 page)
                 </a>
               </div>
             </div>
@@ -155,15 +157,15 @@ const featured = [...projects.filter(p => p.data.featured), ...projects.filter(p
         <a class="hidden md:inline-flex text-sm text-blue-400 hover:underline" href="/projects">View all case studies</a>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {featured.map((p) => (
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {featured.map((p, i) => (
           <ProjectCard
             href={`/projects/${p.slug}`}
             title={p.data.title}
             subtitle={p.data.subtitle}
             image={p.data.heroImage}
             tags={p.data.tags}
-            featured={p.data.featured}
+            index={i}
           />
         ))}
       </div>

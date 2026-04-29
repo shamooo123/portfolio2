@@ -21,7 +21,10 @@ const projects = defineCollection({
       .object({
         repo: link.optional(),
         report: link.optional(),
+        report2: link.optional(),
+        report2Label: z.string().optional(),
         demo: link.optional(),
+        video: link.optional(),
       })
       .optional(),
   }),

@@ -21,7 +21,6 @@ const hero = project.data.heroImage ?? "/images/project1.jpg";
 <BaseLayout title={title} description={description} image={hero} canonicalPath={`/projects/${project.slug}/`}>
   <div class="fixed inset-0 z-0 pointer-events-none">
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(56,189,248,0.04),transparent_55%)]"></div>
-    <div class="absolute inset-0" style="background-image: radial-gradient(rgba(148, 163, 184, 0.05) 1px, transparent 1px); background-size: 40px 40px;"></div>
   </div>
 
   <Nav />
@@ -37,18 +36,76 @@ const hero = project.data.heroImage ?? "/images/project1.jpg";
         {project.data.tags?.map((t) => <TagPill label={t} />)}
       </div>
 
-      <div class="mt-6 grid sm:grid-cols-3 gap-4 text-sm text-slate-400">
-        {project.data.timeline && <div class="glass-panel rounded-xl p-4"><div class="text-slate-300 font-semibold mb-1">Timeline</div>{project.data.timeline}</div>}
-        {project.data.role && <div class="glass-panel rounded-xl p-4"><div class="text-slate-300 font-semibold mb-1">Role</div>{project.data.role}</div>}
-        <div class="glass-panel rounded-xl p-4">
-          <div class="text-slate-300 font-semibold mb-1">Links</div>
-          <div class="flex flex-col gap-1">
-            {project.data.links?.repo && <a class="text-blue-400 hover:underline" href={project.data.links.repo} target="_blank" rel="noopener noreferrer">Repo ↗</a>}
-            {project.data.links?.report && <a class="text-blue-400 hover:underline" href={project.data.links.report} target="_blank" rel="noopener noreferrer">Report ↗</a>}
-            {project.data.links?.demo && <a class="text-blue-400 hover:underline" href={project.data.links.demo} target="_blank" rel="noopener noreferrer">Demo ↗</a>}
+      <div class="mt-6 grid sm:grid-cols-2 gap-4 text-sm text-slate-400">
+        {project.data.timeline && (
+          <div class="glass-panel rounded-xl p-4">
+            <div class="text-slate-300 font-semibold mb-1">Timeline</div>
+            {project.data.timeline}
           </div>
-        </div>
+        )}
+        {project.data.role && (
+          <div class="glass-panel rounded-xl p-4">
+            <div class="text-slate-300 font-semibold mb-1">Role</div>
+            {project.data.role}
+          </div>
+        )}
       </div>
+
+      <!-- Download / link buttons styled like HEAR/CV on main page -->
+      {(project.data.links?.report || project.data.links?.report2 || project.data.links?.repo || project.data.links?.demo || project.data.links?.video) && (
+        <div class="mt-5 flex flex-wrap gap-3">
+          {project.data.links?.report && (
+            <a
+              href={project.data.links.report}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs font-medium text-white transition-all"
+            >
+              Download Group Report
+            </a>
+          )}
+          {project.data.links?.report2 && (
+            <a
+              href={project.data.links.report2}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs font-medium text-white transition-all"
+            >
+              {project.data.links.report2Label ?? "Download Report"}
+            </a>
+          )}
+          {project.data.links?.repo && (
+            <a
+              href={project.data.links.repo}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs font-medium text-white transition-all"
+            >
+              GitHub ↗
+            </a>
+          )}
+          {project.data.links?.demo && (
+            <a
+              href={project.data.links.demo}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs font-medium text-white transition-all"
+            >
+              Live Demo ↗
+            </a>
+          )}
+          {project.data.links?.video && (
+            <a
+              href={project.data.links.video}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-4 py-2 bg-blue-600 hover:bg-blue-500 border border-blue-500/30 rounded-lg text-xs font-medium text-white transition-all"
+            >
+              Watch Video ↗
+            </a>
+          )}
+        </div>
+      )}
 
       {hero && (
         <div class="mt-8 glass-panel rounded-2xl overflow-hidden">
