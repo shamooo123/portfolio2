@@ -1,80 +1,56 @@
-# 🌐 Hishaam Ali Abbasi - Personal Portfolio (V2)
+# Hishaam Abbasi | Engineering portfolio
 
-> **Live Site:** [hishaamabbasi.co.uk](https://hishaamabbasi.co.uk/)
+A static portfolio for Hishaam Ali Abbasi, a First Class Robotics Engineering graduate. Built with Astro 4, Tailwind and custom CSS.
 
-Welcome to the repository for my current personal portfolio! I am a Robotics Engineering student at Queen Mary, University of London. This website serves as a digital showcase of my work bridging software and the physical world. 
+The redesign puts practical engineering work first: original build photography, concise project summaries, clear case studies and a single main CV download.
 
----
+## Run locally
 
-### 📖 About This Project
+Use a Node.js version supported by the installed Astro version, then:
 
-I built this portfolio to act as a central hub for my engineering and development projects. While my academic focus is heavily rooted in robotics, control systems, and hardware, I treat web development as a crucial tool for bringing physical products to life and sharing them with the world.
-
-This site highlights my technical journey, from completing an R&D internship debugging firmware at Alvis Robotics to developing my high fidelity fracture immobilisation trainer.
-
-### 🛠️ Tech Stack
-
-*Update the technologies below based on what you specifically used to build this V2 site!*
-
-* **Frontend:** React / Next.js / HTML/CSS/JS
-* **Styling:** Tailwind CSS / Custom CSS
-* **Deployment:** Vercel / Netlify / GitHub Pages
-* **Other Tools:** Figma (UI/UX Design), Git
-
----
-
-### 🚀 Featured Work Showcased
-
-The portfolio details several of my key projects across hardware, firmware, and software:
-
-* **Fracture Immobilisation Trainer:** A haptic medical trainer integrating fluidic pumps and subcutaneous force sensors with an ESP32.
-* **Active Camera Gimbal:** A gyroscopically balanced gimbal utilizing custom PID control loops.
-* **BoxTurtle Filament Changer:** Advanced 3D printing hardware modifications for multi-material prints.
-* **E-Commerce Platforms:** Full-stack development for sites like Bones of Steel.
-
----
-
-### 💻 Local Development
-
-If you'd like to run this project locally to explore the code:
-
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/shamooo123/portfolio-2.git](https://github.com/shamooo123/portfolio-2.git)
-
-
-
-2. **Navigate into the directory:**
-```bash
-cd portfolio-2
-
-```
-
-
-3. **Install dependencies:**
-```bash
-npm install
-
-```
-
-
-4. **Start the development server:**
-```bash
+```sh
+npm ci
 npm run dev
-
 ```
 
+## Build for the existing website
 
+```sh
+npm run build
+```
 
----
+The complete static website is generated in `dist/`. Serve the contents of that directory from your existing web server. Keep the folder structure intact. Project pages use directory URLs, so the server should serve each directory's `index.html`. Configure the server to use `404.html` for missing pages.
 
-### 📫 Get In Touch
+The canonical domain remains `https://hishaamabbasi.co.uk`. The private review copy does not change your existing public website.
 
-I am always open to chatting about robotics, 3D printing, or exciting engineering opportunities.
+## Main files
 
-* **Email:** [hishaamabbasi@gmail.com](mailto:hishaamabbasi@gmail.com)
-* **LinkedIn:** [linkedin.com/in/hishaam-ali-abbasi](https://www.google.com/search?q=https://www.linkedin.com/in/hishaam-ali-abbasi)
+| What to change | File |
+|---|---|
+| Home page, education and experience | `src/pages/index.astro` |
+| Project writing and metadata | `src/content/projects/*.md` |
+| Case study layout | `src/pages/projects/[slug].astro` |
+| Project archive and filters | `src/pages/projects/index.astro` |
+| Colours, type and responsive layouts | `src/styles/global.css` |
+| Contact and social links | `src/site-config.ts` |
+| Navigation and footer | `src/components/` |
+| Photos and downloadable documents | `public/images/` and `public/assets/` |
 
-<p align="center">
-<i>Designed and built by Hishaam Ali Abbasi</i>
-</p>
+## The main CV
+
+The homepage downloads `public/assets/Hishaam_Ali_Abbasi_CV.pdf`, the updated two-page general CV supplied with this website. Replace that file when updating the CV, then rebuild. The older PDF files remain available at their existing paths for compatibility, but they are not presented as competing download choices.
+
+## Images
+
+The visible build photography comes from the supplied portfolio and design reports. The trainer photos were extracted from the individual report. Optimised WebP copies are used by the pages; the original image files remain available. The site does not use stock photos to stand in for Hishaam's own projects.
+
+## Accessibility and behaviour
+
+- Semantic headings, labelled navigation and a skip link.
+- Visible keyboard focus and reduced-motion support.
+- Mobile menu works using native HTML details, with Escape and link-close behaviour added by JavaScript.
+- All projects are available without JavaScript; category filters enhance the archive when JavaScript is available.
+- Case study contents links, responsive tables and descriptive image captions.
+- Report PDFs and the main CV remain direct links.
+
+See `REDESIGN_NOTES.md` for changes, content decisions and verification limits.

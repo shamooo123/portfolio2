@@ -1,110 +1,88 @@
 ---
-title: "Fracture Immobilisation Trainer"
-subtitle: "A high-fidelity cast-application simulator integrating a 3D-printed anatomical core, pulsatile flow, haptic feedback, embedded sensing, and real-time UI — built for under £500 vs a £2,000 commercial alternative."
+title: Fracture Immobilisation Trainer
+subtitle: An anatomical forearm with embedded sensing, layered silicone and a material study.
 featured: true
 order: 1
-timeline: "2025–2026 (Final Year Project)"
-role: "Anatomical Core Lead — skeletal design, soft-tissue system, mould manufacture, material selection"
-tags: ["Haptics", "ESP32", "Fluidics", "Sensors", "3D Printing", "Blender", "Silicone Casting", "Rapid Prototyping"]
-heroImage: "/images/project1.jpg"
+timeline: 2025–2026 · Final year project
+role: Anatomical core lead in a five-person team
+tags:
+- Haptics
+- ESP32
+- Fluidics
+- Sensors
+- 3D Printing
+- Blender
+- Silicone Casting
+- Rapid Prototyping
+heroImage: /images/trainer-printing.webp
 links:
-  report: "/assets/EMS690U_Integrated_Design_Project.pdf"
-  report2: "/assets/EMS690U_Detailed_Design_Report_Hishaam_Abbasi_Complete-1.pdf"
-  report2Label: "Download Individual Report"
-  video: "https://youtu.be/kSiA5kM77s0"
+  report: /assets/EMS690U_Integrated_Design_Project.pdf
+  report2: /assets/EMS690U_Detailed_Design_Report_Hishaam_Abbasi_Complete-1.pdf
+  report2Label: Download Individual Report
+  video: https://youtu.be/kSiA5kM77s0
+category: Medical training · Design & manufacture
+outcome: Functional training prototype; estimated materials cost under £500
+heroAlt: Printed forearm and hand components on the printer bed
+heroCaption: The printed anatomical core during manufacture. Photograph from my individual design report.
 ---
 
-## The Problem
+## The brief
 
-Distal radius fractures account for approximately 17.5% of all fractures presenting to UK emergency departments, making correct cast application a foundational clinical skill. Training on real patients is increasingly constrained by ethical concerns and patient apprehension — yet the consequences of poor technique are serious: thermal burns from exothermic plaster reactions, pressure sores from inadequate padding, and compartment syndrome from excessive cast tightness.
+Build an adult-scale forearm for practising fracture immobilisation, with feedback from the physical model. The team combined an anatomical core, flow pumping, haptics, sensing and a user interface in one prototype.
 
-Existing commercial trainers such as the Limbs & Things Colles' Fracture Trainer (~£2,000) are **passive** — they provide a realistic substrate but deliver no objective feedback. Assessment depends entirely on an observing instructor. This project closes that loop.
+I led the **anatomical core workstream** in a five-person team. My responsibility was the physical structure that the other systems had to fit into: the skeleton, soft tissue, moulds and internal routing. I also integrated Hall-effect sensing at the fracture site with an ESP32 for real-time alignment feedback.
 
----
+## Designing the core
 
-## Project Proposal Video
+I modelled the 1:1 forearm in **Blender**, including the fracture site, joints and routes for fluid tubing, sensor wiring and haptic actuators. These interfaces needed agreement across the team before printing, because a small change in one subsystem could force another part to be remade.
 
-<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.5rem 0;">
-  <iframe
-    src="https://www.youtube.com/embed/kSiA5kM77s0"
-    title="Interactive Fracture Immobilisation Trainer — Project Proposal"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    allowfullscreen
-    style="position:absolute;top:0;left:0;width:100%;height:100%;"
-  ></iframe>
-</div>
-
----
-
-## System Architecture
-
-The trainer is divided into five integrated workstreams, each developed in parallel with shared interface specifications:
-
-| Workstream | Function |
+| Interface | Design consideration |
 |---|---|
-| **Anatomical Core** *(my workstream)* | 1:1 scale forearm chassis — skeleton, joints, soft tissue |
-| **Flow Pumping System** | Programmable pulsatile flow replicating vascular physiology |
-| **Haptic Feedback** | Piezoelectric actuators embedded in soft tissue |
-| **Sensing** | Hall-effect sensors for fracture alignment; pressure distribution |
-| **User Interface** | ESP32-driven real-time display for trainee feedback and scoring |
+| Skeleton and fracture site | Maintain the anatomical form while allowing the fracture fragments to move |
+| Fluidics | Route tubing through the core without obstructing the other systems |
+| Sensing | Place Hall-effect sensors and wiring around the fracture site |
+| Haptics | Provide space for actuators within the soft tissue |
+| Soft tissue | Use replaceable moulded sections around the printed structure |
 
----
+<figure><img src="/images/trainer-fracture-cad.webp" alt="Blender model showing the simulated fracture site in the radius" loading="lazy" width="1336" height="854" /><figcaption>The fracture geometry in Blender, from my individual design report.</figcaption></figure>
 
-## My Workstream: Anatomical Core
+## Choosing a material
 
-My role was to design and manufacture the physical integration chassis — the anatomical forearm model that every other subsystem mounts into. The core spans humerus to fingertips at a 1:1 adult scale (255 mm forearm, 50th-percentile NASA anthropometric data), and must simultaneously be anatomically faithful, mechanically durable, and modular enough to host sensing, fluidics, and haptics.
+I compared **four FDM materials** using a cantilever deflection test under progressive loading. The aim was to compare how the printed specimens responded across the test range, rather than choose solely from a material datasheet.
 
-### Skeletal Structure
+| Material | Observation in the study |
+|---|---|
+| PETG-CF | The most consistent apparent elastic response across the loading range |
+| PLA | Apparent stiffness decreased as loading increased; visible whitening at the highest load |
+| ASA-CF | Intermediate behaviour, with mild whitening at the highest load |
+| ABS | Drift in the measured response and the strongest visible whitening |
 
-The skeleton was sculpted in **Blender 4.5** from photographic reference, then sliced in Orca for FDM printing. Internal routing channels run through the bones for flow tubing, sensor wiring, and actuator connections — so no external cabling compromises the model's realism.
+I selected **PETG-CF** for the intended load-bearing elements. Material availability meant the prototype used PLA and ASA-CF in places. That distinction matters: the selected material and the material in the prototype were not identical.
 
-A clean transverse break in the distal radius simulates the Colles' fracture site. Fragment alignment is tracked in real time via **Hall-effect magnetometers** embedded at the fracture, giving trainees an objective measure of how well the cast is stabilising the break.
+The rig was useful for comparison, but the deflections were large relative to the specimens. I therefore treat the calculated modulus values as approximate. The study did not establish long-term fatigue life; repeated-load testing remains future work.
 
-### Material Selection — Cantilever Study
+<figure><img src="/images/trainer-testing.webp" alt="The material test setup during the cantilever study" loading="lazy" width="899" height="585" /><figcaption>The material test setup. The results informed material selection, with the limitations of the rig recorded in the report.</figcaption></figure>
 
-Cast application loads are cyclic and long-duration, so the relevant properties are **elastic stability** across many cycles, not ultimate strength. I ran a cantilever deflection study comparing four FDM filaments under progressive loading:
+## Manufacturing the soft tissue
 
-| Material | Stiffness (MPa) | Elastic Stability | Whitening at 396g |
-|---|---|---|---|
-| **PETG-CF** | ~2,350 | ✅ Flat — no drift | None |
-| PLA | ~2,700 → 2,300 | ❌ ~15% drift | Visible |
-| ASA-CF | ~2,400 | Partial | Mild |
-| ABS | ~1,950 | ❌ Drift | Strongest |
+I designed and printed multi-part moulds around the final bone geometry. The soft tissue used two silicone layers: **Dragon Skin 30A** for the muscle layer and **Ecoflex 00-30** for the skin.
 
-**PETG-CF** was the only material whose apparent Young's modulus stayed flat across the loading range — the only candidate showing no plastic yielding at realistic trainer loads. This is the production specification for all load-bearing skeletal elements. The prototype uses PLA/ASA-CF as a filament-constrained fallback to be replaced before live training deployment.
+Casting came after checking the skeleton and internal routes. The modular arrangement also allowed individual soft-tissue sections to be replaced without remaking the entire core.
 
-### Soft Tissue System
+<div class="image-pair"><figure><img src="/images/trainer-moulds.webp" alt="Printed forearm moulds and cast components on the workbench" loading="lazy" width="477" height="702" /><figcaption>Moulds and soft-tissue components during manufacture.</figcaption></figure><figure><img src="/images/trainer-build.webp" alt="Anatomical trainer components, showing the skeleton and removable soft-tissue layers" loading="lazy" width="828" height="812" /><figcaption>The skeleton and moulded layers at different stages of assembly.</figcaption></figure></div>
 
-The dual-durometer silicone system is the key differentiator from single-material competitors:
+## Outcome and next steps
 
-- **Muscle layer:** Dragon Skin 30A — stiffer elastic matrix replicating the resistance of bony landmarks felt through palpation
-- **Skin layer:** Ecoflex 00-30 — high elongation at break (900%), low viscosity for detailed mould reproduction, replicates the compliance of real skin
+The team produced a functional training prototype with an **estimated materials cost below £500**. My work combined CAD, material comparison, FDM printing, silicone casting and sensing integration.
 
-This is motivated by tissue mechanics data from the literature: the indentation response of the forearm is 9–16× more sensitive to skin mechanics than to deeper tissue, so realistic skin compliance dominates the tactile impression during palpation. A single bulk silicone cannot replicate this.
+Informal handling comparisons favoured the layered soft tissue over uniform samples. That was qualitative feedback, not clinical validation. Full cyclic testing and formal clinical evaluation were still outstanding at the end of the project.
 
-In informal handling tests, users consistently identified the dual-layer model as more realistic than uniform samples when palpating for bony landmarks — qualitatively consistent with the literature on multi-layer tissue simulation.
+The main lesson was to settle physical interfaces early. A modular design only saves work if dimensions, tolerances and routing are clear enough for every workstream to build against them.
 
-### Mould Design and Manufacture
+## Reports and proposal video
 
-Multi-part moulds were designed in **Blender** around the finalised bone geometry, then printed in PLA and filler-primed. Silicone was cast last in the workflow, allowing the skeleton and internal routing to be fully verified before committing to the soft tissue layers. The modular mould design means individual skin panels can be replaced independently without rebuilding the skeleton — roughly trebling the usable life of the artefact per unit of silicone.
+The [group report](/assets/EMS690U_Integrated_Design_Project.pdf) covers the complete system. My [individual report](/assets/EMS690U_Detailed_Design_Report_Hishaam_Abbasi_Complete-1.pdf) gives the detail behind the anatomical core, material study and manufacture.
 
----
+The video below introduces the project proposal.
 
-## Outcomes
-
-- ✅ **Cost target met** — estimated material cost below £500 vs £2,000 commercial comparator
-- ✅ **Modularity met** — no interface change required throughout the project as subsystems evolved
-- ✅ **Tactile fidelity demonstrated qualitatively** — layered model consistently preferred over uniform samples in informal palpation tests
-- ⚠️ **Durability partially met** — PETG-CF selected but prototype uses PLA; full cyclic validation pending
-- ⚠️ **Formal clinical validation not yet performed** — prototype level; quantitative palpation comparison against cadaveric forearm is future work
-
----
-
-## What I Learned
-
-Working across a five-person team with tightly coupled physical interfaces forced very early and very precise agreement on dimensions, tolerances, and channel geometry. The lesson was that **modular architecture is only as good as the interface specifications defined before any part is printed** — vague interfaces cause expensive reprints.
-
-The cantilever study also taught me to be more careful about the validity limits of analytical models: δ/L reached 25–36% in my tests, well beyond the ~10% limit of small-deflection beam theory, so absolute E values are systematically underestimated. The ranking between materials still holds because all specimens were loaded into the same regime — but it was a useful reminder that approximate rigs give approximate answers.
-
-
+<div class="video-embed"><iframe src="https://www.youtube-nocookie.com/embed/kSiA5kM77s0" title="Fracture Immobilisation Trainer: project proposal" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>

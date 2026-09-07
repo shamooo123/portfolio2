@@ -1,25 +1,37 @@
 ---
-title: "Active Camera Gimbal"
-subtitle: "DIY 2-axis stabiliser with custom C++ firmware and real-time PID control loops."
+title: Active Camera Gimbal
+subtitle: A two-axis camera stabiliser with custom C++ firmware and real-time PID control.
 featured: false
-order: 3
-timeline: "Personal project"
-role: "Embedded C++ • control tuning • mechanical build"
-tags: ["Embedded C++", "PID Control", "Mechatronics"]
-heroImage: "/images/project3.jpg"
+order: 5
+timeline: Personal project
+role: Mechanical build, embedded programming and control tuning
+tags:
+- Embedded C++
+- PID Control
+- Mechatronics
+heroImage: /images/project3-1280.webp
+category: Embedded systems · Control
+outcome: Working two-axis stabiliser integrating hardware and firmware
+heroAlt: Printed camera gimbal with a mounted GoPro, servos, wiring and microcontroller
+heroCaption: The assembled two-axis gimbal, with its embedded electronics visible.
 ---
 
-## Goal
+## The goal
 
-Build a compact stabiliser that keeps a camera level against movement — then make it *actually feel stable*, not just “move”.
+Build a compact two-axis stabiliser that keeps a camera level as its base moves. I wanted to connect the control theory with the practical behaviour of a real mechanism.
 
 ## What I built
 
-- Real-time **PID loops** for stabilisation
-- Firmware architecture focused on **predictable timing** (control loops hate jitter)
-- Mechanical layout designed for stiffness and smooth motion
+I assembled a printed mechanical frame, actuators and an embedded microcontroller, then wrote custom **C++ firmware** with real-time **PID control loops** for stabilisation.
 
-## What I’d improve next
+The work connected three parts of the problem:
 
-- Add better IMU filtering (e.g., complementary / Kalman) and quantify latency.
-- Create a proper tuning workflow (step responses, frequency response checks).
+| Area | My focus |
+|---|---|
+| Mechanical design | A frame that supports the camera and allows movement about two axes |
+| Electronics | Integrating sensing, actuators and the controller |
+| Firmware | Predictable control-loop timing and PID tuning |
+
+## What I would improve
+
+The next step is to make the tuning process more measurable. I would record step responses and latency, then compare filtering options for the inertial measurements. Those are planned improvements, rather than performance results from this build.

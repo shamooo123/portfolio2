@@ -1,68 +1,39 @@
-# Hishaam Abbasi — Portfolio (Astro)  
+# Build and edit the portfolio
 
-This repo contains a static portfolio site built with **Astro + Tailwind**, designed to deploy cleanly on **Vercel**.
+Run `npm ci` to install the exact dependencies in the lockfile. Run `npm run dev` for local development, `npm run build` to generate the static site, and `npm run preview` to inspect the build locally.
 
-## Local development
+Upload the contents of `dist/` to the web root used by the existing hosting setup. Preserve subdirectories and PDF/image files. The source remains an Astro project and does not require moving the public site to a different hosting provider.
 
-1) Install Node.js (recommended: Node 20 LTS).
+## Add a project
 
-2) Install dependencies:
+Create a Markdown file in `src/content/projects/`. Its filename becomes the URL slug.
 
-```bash
-npm install
-```
-
-3) Run the dev server:
-
-```bash
-npm run dev
-```
-
-Astro will print a local URL (usually http://localhost:4321).
-
-## Build
-
-```bash
-npm run build
-npm run preview
-```
-
-## Where to edit
-
-- Home page: `src/pages/index.astro`
-- Projects list: `src/pages/projects/index.astro`
-- Project pages (content): `src/content/projects/*.md`
-- Project page template: `src/pages/projects/[slug].astro`
-- Global styling: `src/styles/global.css`
-- Static assets (images, PDFs): `public/`
-
-## Adding a new project case study
-
-Create a new markdown file in `src/content/projects/`:
-
-```md
+```yaml
 ---
-title: "My Project"
-subtitle: "One-line value proposition"
+title: My project
+cardTitle: Short card title
+subtitle: One concise sentence about the actual build.
+category: Mechanical design
 featured: false
-order: 10
+order: 8
 timeline: "2026"
-role: "What you owned"
-tags: ["ROS2", "C++"]
-heroImage: "/images/my-project.jpg"
-links:
-  repo: "https://github.com/..."
-  demo: "https://..."
+role: Your actual contribution
+outcome: An evidenced result or a clear current status
+tags: [CAD, Prototyping]
+heroImage: /images/my-project.webp
+heroAlt: Describe what the image shows.
+heroCaption: Explain the photograph or result.
 ---
-
-## Problem
-...
-
-## What I built
-...
 ```
 
-## SEO
+Quote dates such as `timeline: "2026"` so the value stays a string. Use second-level headings (`##`) for the main case study sections; these populate the contents navigation automatically. For optional PDF, repository and video links, follow the existing trainer front matter.
 
-- Canonical URLs and OpenGraph tags are set in `src/layouts/BaseLayout.astro`.
-- Domain/canonical is configured in `astro.config.mjs` via `site: 'https://hishaamabbasi.co.uk'`.
+The archive filters are mapped in `src/pages/projects/index.astro`. Include the new project in the appropriate categories there. The homepage displays the first four featured projects in `order` sequence.
+
+## Image captions
+
+Use a `figure` containing an `img` and a `figcaption`. Supply an accurate `alt`, dimensions and `loading="lazy"` for images lower down the page. Do not use a generic product photograph as evidence of your own build.
+
+## Keep facts current
+
+Update project status and dates when work changes. Keep proposed improvements separate from completed work. The current CV is authoritative for qualifications and experience.

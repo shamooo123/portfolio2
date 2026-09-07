@@ -12,10 +12,3 @@ export const SOCIAL = {
   instagram: 'https://www.instagram.com/hishaam_abbasi/',
   instagramName: 'Hishaam Abbasi',
 };
-
-export const TYPEWRITER_WORDS = [
-  'Robotics Engineer',
-  'Embedded Developer',
-  'Rapid Prototyper',
-  'Control Systems Builder',
-];

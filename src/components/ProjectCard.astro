@@ -1,63 +1,9 @@
 ---
-import TagPill from "./TagPill.astro";
-
-const { href, title, subtitle, image, tags = [], index = 0 } = Astro.props;
-const isLeft = index % 2 === 0;
+import Arrow from "./Arrow.astro";
+const { project, index = 0, featured = false } = Astro.props;
+const p = project.data;
 ---
-
-<a
-  href={href}
-  class={[
-    "group relative block glass-panel rounded-2xl overflow-hidden",
-    "hover:border-blue-500/40 transition-all duration-300",
-    isLeft ? "origin-left" : "origin-right",
-  ].join(" ")}
-  style={isLeft
-    ? "box-shadow: -8px 0 40px -12px rgba(96,165,250,0.0); transition: box-shadow 0.4s ease, border-color 0.3s ease;"
-    : "box-shadow:  8px 0 40px -12px rgba(96,165,250,0.0); transition: box-shadow 0.4s ease, border-color 0.3s ease;"}
-  onmouseenter={isLeft
-    ? "this.style.boxShadow='-12px 0 50px -8px rgba(96,165,250,0.25)'"
-    : "this.style.boxShadow='12px 0 50px -8px rgba(96,165,250,0.25)'"}
-  onmouseleave="this.style.boxShadow='none'"
->
-  <!-- Accent bar — left cards get left bar, right cards get right bar -->
-  <div
-    class={[
-      "absolute top-0 bottom-0 w-[2px] z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300",
-      "bg-gradient-to-b from-transparent via-blue-400 to-transparent",
-      isLeft ? "left-0" : "right-0",
-    ].join(" ")}
-  ></div>
-
-  <!-- Image -->
-  <div class="h-52 bg-slate-900 relative overflow-hidden">
-    {image ? (
-      <img
-        src={image}
-        alt={title}
-        loading="lazy"
-        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100"
-      />
-    ) : (
-      <div class="w-full h-full flex items-center justify-center text-slate-600 text-sm">No image</div>
-    )}
-    <!-- Bottom fade -->
-    <div class="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
-  </div>
-
-  <!-- Content -->
-  <div class="p-6">
-    <h3 class="text-xl font-bold text-white mb-2 group-hover:text-blue-100 transition-colors">{title}</h3>
-    {subtitle && (
-      <p class="text-slate-400 text-sm leading-relaxed mb-4 line-clamp-3">{subtitle}</p>
-    )}
-    <div class="flex gap-2 flex-wrap">
-      {tags.slice(0, 5).map((t) => <TagPill label={t} />)}
-    </div>
-
-    <!-- Arrow indicator -->
-    <div class={["mt-4 text-blue-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1", isLeft ? "" : "justify-end"].join(" ")}>
-      {isLeft ? (<>View case study <span>→</span></>) : (<><span>←</span> View case study</>)}
-    </div>
-  </div>
+<a class:list={["project-card", featured && "project-card-featured"]} href={`/projects/${project.slug}/`}>
+  <div class:list={["project-image", p.imageStyle]}><img src={p.heroImage} alt={p.heroAlt ?? p.title} loading="lazy" decoding="async" width="1200" height="900" /><span class="project-number" aria-hidden="true">{String(index+1).padStart(2,'0')}</span><span class="project-open" aria-hidden="true"><Arrow diagonal /></span></div>
+  <div class="project-copy"><p class="eyebrow">{p.category}</p><h3>{p.cardTitle ?? p.title}</h3><p>{p.subtitle}</p><span class="text-link">View case study <Arrow /></span></div>
 </a>

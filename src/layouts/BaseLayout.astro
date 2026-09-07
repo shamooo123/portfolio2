@@ -1,40 +1,28 @@
 ---
 import "../styles/global.css";
 import { SITE } from "../site-config";
-import DotField from "../components/DotField.astro";
-
-const {
-  title = SITE.name,
-  description = "Portfolio site",
-} = Astro.props;
-
+const { title = SITE.name, description = "Engineering projects, practical experience and ideas made into working hardware.", noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, SITE.domain).toString();
 ---
-
 <!doctype html>
-<html lang="en">
+<html lang="en-GB">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7f8fa" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;750;800&display=swap" rel="stylesheet" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
   </head>
-  <body class="bg-slate-950 text-slate-200 selection:bg-blue-500 selection:text-white antialiased">
-    <DotField />
-    <div class="relative z-10">
-      <slot />
-    </div>
-  </body>
+  <body><a class="skip-link" href="#main">Skip to content</a><slot /></body>
 </html>

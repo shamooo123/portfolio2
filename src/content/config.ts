@@ -10,6 +10,12 @@ const projects = defineCollection({
   type: "content",
   schema: z.object({
     title: z.string(),
+    cardTitle: z.string().optional(),
+    category: z.string().default("Engineering project"),
+    outcome: z.string().optional(),
+    heroAlt: z.string().optional(),
+    heroCaption: z.string().optional(),
+    imageStyle: z.string().optional(),
     subtitle: z.string().optional(),
     featured: z.boolean().default(false),
     order: z.number().default(99),

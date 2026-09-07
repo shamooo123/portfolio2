@@ -4,44 +4,20 @@ import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import ProjectCard from "../../components/ProjectCard.astro";
 import { getCollection } from "astro:content";
-
-const projects = (await getCollection("projects"))
-  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+const projects = (await getCollection("projects")).sort((a,b)=>a.data.order-b.data.order);
+const filters = ['All projects','Mechanical','Embedded','Infrastructure'];
 ---
-
-<BaseLayout
-  title="Case Studies | Hishaam Ali Abbasi"
-  description="Detailed write-ups of my robotics and engineering projects: system architecture, design decisions, and results."
-  canonicalPath="/projects/"
->
-  <div class="fixed inset-0 z-0 pointer-events-none">
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(56,189,248,0.04),transparent_55%)]"></div>
-    <div class="absolute inset-0" style="background-image: radial-gradient(rgba(148, 163, 184, 0.05) 1px, transparent 1px); background-size: 40px 40px;"></div>
-  </div>
-
-  <Nav />
-
-  <main class="relative z-10 pt-28 pb-10 px-6 max-w-6xl mx-auto">
-    <div class="mb-10">
-      <h1 class="text-4xl md:text-5xl font-extrabold text-white">Case studies</h1>
-      <p class="mt-3 text-slate-400 max-w-2xl">
-        Deeper write-ups: what I built, why I made the decisions I did, and what I’d improve next.
-      </p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {projects.map((p) => (
-        <ProjectCard
-          href={`/projects/${p.slug}`}
-          title={p.data.title}
-          subtitle={p.data.subtitle}
-          image={p.data.heroImage}
-          tags={p.data.tags}
-          featured={p.data.featured}
-        />
-      ))}
-    </div>
-  </main>
-
-  <Footer />
-</BaseLayout>
+<BaseLayout title="Engineering Projects | Hishaam Abbasi" description="Project case studies covering mechanical design, embedded control, additive manufacturing and self-hosted infrastructure."><Nav /><main id="main" class="container project-index"><header class="index-heading"><p class="eyebrow section-kicker">The project archive</p><h1>Ideas made physical.<br /><span>Systems made useful.</span></h1><p>What I built, the decisions behind it, and what I would improve next.</p></header><div class="project-filters" aria-label="Filter projects" hidden>{filters.map((filter,index)=><button type="button" data-filter={filter} aria-pressed={index===0}>{filter}<span>{index===0?String(projects.length).padStart(2,'0'):''}</span></button>)}</div><div class="project-grid archive-grid" id="project-list">{projects.map((project,index)=><div class="filter-project" data-categories={project.slug==='home-server'?'Infrastructure':project.slug==='active-camera-gimbal'?'Embedded':'Mechanical'+(project.slug==='fracture-immobilisation-trainer'||project.slug==='boxturtle-filament-system'||project.slug==='ender-3-modifications'||project.slug==='sim-racing-pedals'?' Embedded':'')}><ProjectCard project={project} index={index} /></div>)}</div><p id="filter-status" class="sr-only" role="status" aria-live="polite"></p></main><Footer /></BaseLayout>
+<script>
+  const filters = document.querySelector<HTMLElement>('.project-filters');
+  if (filters) filters.hidden = false;
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const cards = document.querySelectorAll<HTMLElement>('.filter-project');
+  buttons.forEach(button=>button.addEventListener('click',()=>{
+    const filter=button.dataset.filter;
+    buttons.forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
+    let count=0;
+    cards.forEach(card=>{const show=filter==='All projects'||card.dataset.categories?.split(' ').includes(filter??'');card.hidden=!show;if(show)count++;});
+    const status=document.getElementById('filter-status');if(status)status.textContent=`${count} ${filter==='All projects'?'':filter?.toLowerCase()+' '}projects shown.`;
+  }));
+</script>
